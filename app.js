@@ -53,20 +53,13 @@ let slideIndex = 0;
 const selectItem = (event, img) => {
   let element = event.target;
   element.classList.toggle('added');
-  sliders.map(element => {
-    if(sliders.indexOf(img) !== element){
-      sliders.push(img);
-    }
-    else {
-      sliders.pop(img);
-    }
-  })
- /*  if (sliders.indexOf(img) === -1) {
+  const index = sliders.indexOf(img);
+  if ( index === -1) {
     sliders.push(img);
   }
   else {
-    sliders.pop(img);
-  } */
+    sliders.splice(index, 1);
+  }
 }
 var timer
 const createSlider = () => {
