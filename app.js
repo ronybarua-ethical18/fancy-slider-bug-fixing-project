@@ -25,16 +25,25 @@ const showImages = (images) => {
   showErrorMessage('');
   const searchValue = document.getElementById("search").value;
   if (searchValue !== '') {
+    toggleSpinner();
     imagesArea.style.display = 'block';
     gallery.innerHTML = '';
     // show gallery title
     galleryHeader.style.display = 'flex';
     images.forEach(image => {
-      let div = document.createElement('div');
-      div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
-      div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
-      gallery.appendChild(div)
+      if (image.tags !== null) {
+        console.log(image.tags);
+        let div = document.createElement('div');
+        div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
+        div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
+        gallery.appendChild(div)
+        toggleSpinner();
+      }
+      else {
+        showErrorMessage('error');
+      }
     })
+
   }
   else {
     showErrorMessage('search box can not be null');
@@ -42,11 +51,11 @@ const showImages = (images) => {
 }
 // data.hits[0].tags
 const getImages = (query) => {
+  toggleSpinner();
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
     .then(data => showImages(data.hits))
     .catch(err => console.log(err))
-
 }
 
 let slideIndex = 0;
@@ -54,7 +63,7 @@ const selectItem = (event, img) => {
   let element = event.target;
   element.classList.toggle('added');
   const index = sliders.indexOf(img);
-  if ( index === -1) {
+  if (index === -1) {
     sliders.push(img);
   }
   else {
@@ -139,4 +148,11 @@ sliderBtn.addEventListener('click', function () {
 const showErrorMessage = (error) => {
   const errorMessage = document.getElementById('errorMessage');
   errorMessage.innerText = error;
+}
+// spinner
+const toggleSpinner = () =>{
+  const spinner = document.getElementById('loading-spinner');
+  const images = document.getElementById('image-gallery');
+  images.classList.toggle('d-lg-none');
+  spinner.classList.toggle('d-lg-none');
 }
