@@ -24,15 +24,14 @@ document.getElementById("search")
 const showImages = (images) => {
   showErrorMessage('');
   const searchValue = document.getElementById("search").value;
+  toggleSpinner();
   if (searchValue !== '') {
-    toggleSpinner();
     imagesArea.style.display = 'block';
     gallery.innerHTML = '';
     // show gallery title
     galleryHeader.style.display = 'flex';
     images.forEach(image => {
       if (image.tags !== null) {
-        console.log(image.tags);
         let div = document.createElement('div');
         div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
         div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
@@ -40,13 +39,13 @@ const showImages = (images) => {
         toggleSpinner();
       }
       else {
-        showErrorMessage('error');
+        showErrorMessage('Items not found');
       }
     })
 
   }
   else {
-    showErrorMessage('search box can not be null');
+    showErrorMessage('search box can not be empty');
   }
 }
 // data.hits[0].tags
